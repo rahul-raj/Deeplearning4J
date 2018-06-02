@@ -67,7 +67,7 @@ public class DeepLearning4j {
 
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
                 .seed(123)
-                .updater(new Adam(0.05))
+                .updater(new Adam(0.01))
                 .list()
                 .layer(new DenseLayer.Builder().nIn(11).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())

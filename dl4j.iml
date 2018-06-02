@@ -138,6 +138,8 @@
     <orderEntry type="library" name="Maven: org.nd4j:nd4j-native:macosx-x86_64:1.0.0-beta" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:nd4j-native:windows-x86_64:1.0.0-beta" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:nd4j-native:linux-ppc64le:1.0.0-beta" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:arbiter-deeplearning4j:1.0.0-beta" level="project" />
+    <orderEntry type="library" name="Maven: org.deeplearning4j:arbiter-core:1.0.0-beta" level="project" />
     <orderEntry type="library" name="Maven: org.deeplearning4j:deeplearning4j-modelimport:1.0.0-beta" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco.javacpp-presets:hdf5-platform:1.10.1-1.4.1" level="project" />

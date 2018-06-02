@@ -7,8 +7,10 @@ import org.datavec.api.transform.schema.Schema;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
 import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
+import org.deeplearning4j.nn.conf.distribution.UniformDistribution;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -64,10 +66,11 @@ public class DeepLearning4j {
         log.info("Building Model------------------->>>>>>>>>");
 
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
-                .updater(new Adam())
+                .seed(123)
+                .updater(new Adam(0.05))
                 .list()
-                .layer(new DenseLayer.Builder().nIn(11).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
-                .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(11).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new OutputLayer.Builder(LossFunctions.LossFunction.XENT)
                         .nIn(6).nOut(1).weightInit(WeightInit.UNIFORM).activation(Activation.SIGMOID).build())
                 .backprop(true).pretrain(false)

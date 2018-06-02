@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class DeepLearning4j {
+public class HyperParamTuning {
 
     private static Logger log = LoggerFactory.getLogger("DeepLearning4j.class");
 
@@ -81,8 +81,8 @@ public class DeepLearning4j {
         System.out.println("args = " + evaluation.stats() + "");
 
 
-      //  Evaluation evaluation = new Evaluation(1);
-       // INDArray output = model.output(splitter.getTestIterator());
+        //  Evaluation evaluation = new Evaluation(1);
+        // INDArray output = model.output(splitter.getTestIterator());
 
 
 /*

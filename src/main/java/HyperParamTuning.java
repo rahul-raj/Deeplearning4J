@@ -4,6 +4,7 @@ import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReade
 import org.datavec.api.split.FileSplit;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.arbiter.MultiLayerSpace;
 import org.deeplearning4j.arbiter.conf.updater.AdamSpace;
 import org.deeplearning4j.arbiter.layers.DenseLayerSpace;
@@ -11,12 +12,25 @@ import org.deeplearning4j.arbiter.layers.OutputLayerSpace;
 import org.deeplearning4j.arbiter.optimize.api.CandidateGenerator;
 import org.deeplearning4j.arbiter.optimize.api.ParameterSpace;
 import org.deeplearning4j.arbiter.optimize.api.data.DataProvider;
-import org.deeplearning4j.arbiter.optimize.api.data.DataSetIteratorFactoryProvider;
+import org.deeplearning4j.arbiter.optimize.api.saving.ResultSaver;
+import org.deeplearning4j.arbiter.optimize.api.score.ScoreFunction;
+import org.deeplearning4j.arbiter.optimize.api.termination.MaxCandidatesCondition;
+import org.deeplearning4j.arbiter.optimize.api.termination.MaxTimeCondition;
+import org.deeplearning4j.arbiter.optimize.api.termination.TerminationCondition;
+import org.deeplearning4j.arbiter.optimize.config.OptimizationConfiguration;
 import org.deeplearning4j.arbiter.optimize.generator.RandomSearchGenerator;
 import org.deeplearning4j.arbiter.optimize.parameter.continuous.ContinuousParameterSpace;
 import org.deeplearning4j.arbiter.optimize.parameter.integer.IntegerParameterSpace;
+import org.deeplearning4j.arbiter.optimize.runner.IOptimizationRunner;
+import org.deeplearning4j.arbiter.optimize.runner.LocalOptimizationRunner;
+import org.deeplearning4j.arbiter.saver.local.FileModelSaver;
+import org.deeplearning4j.arbiter.scoring.impl.EvaluationScoreFunction;
+import org.deeplearning4j.arbiter.task.MultiLayerNetworkTaskCreator;
+import org.deeplearning4j.arbiter.ui.listener.ArbiterStatusListener;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
+import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.io.ClassPathResource;
@@ -24,9 +38,12 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class HyperParamTuning {
 
@@ -38,7 +55,6 @@ public class HyperParamTuning {
 
         ParameterSpace<Double> learningRateParam = new ContinuousParameterSpace(0.0001,0.01);
         ParameterSpace<Integer> layerSizeParam = new IntegerParameterSpace(15,300);
-
         MultiLayerSpace hyperParamaterSpace = new MultiLayerSpace.Builder()
                                                   .updater(new AdamSpace(learningRateParam))
                                                   .addLayer(new DenseLayerSpace.Builder()
@@ -57,23 +73,64 @@ public class HyperParamTuning {
                                                           .nOut(1)
                                                           .build())
                                                   .build();
+
+        Map<String,Object> dataParams = new HashMap<>();
+        dataParams.put("batchSize",new Integer(10));
+
         CandidateGenerator candidateGenerator = new RandomSearchGenerator(hyperParamaterSpace);
-        DataProvider dataProvider = new ExampleDataProvider();
+        DataProvider dataProvider = new ExampleDataProvider(dataParams);
+        ResultSaver modelSaver = new FileModelSaver("resources/");
+        ScoreFunction scoreFunction = new EvaluationScoreFunction(Evaluation.Metric.ACCURACY);
 
 
+        TerminationCondition[] conditions = {
+                new MaxTimeCondition(120, TimeUnit.MINUTES),
+                new MaxCandidatesCondition(30)
 
+        };
 
+        OptimizationConfiguration optimizationConfiguration = new OptimizationConfiguration.Builder()
+                                                               .candidateGenerator(candidateGenerator)
+                                                               .dataProvider(dataProvider)
+                                                               .modelSaver(modelSaver)
+                                                               .scoreFunction(scoreFunction)
+                                                               .terminationConditions(conditions)
+                                                               .build();
 
+        IOptimizationRunner runner = new LocalOptimizationRunner(optimizationConfiguration,new MultiLayerNetworkTaskCreator());
+        StatsStorage ss = new FileStatsStorage(new File("HyperParamOptimizationStats.dl4j"));
+        runner.addListeners(new ArbiterStatusListener(ss));
+        runner.execute();
 
+        //Print the best hyper params
+        double bestScore = runner.bestScore();
+        int bestCandidateIndex = runner.bestScoreCandidateIndex();
+        int numberOfConfigsEvaluated = runner.numCandidatesCompleted();
 
+        String s = "Best score: " + bestScore + "\n" +
+                "Index of model with best score: " + bestCandidateIndex + "\n" +
+                "Number of configurations evaluated: " + numberOfConfigsEvaluated + "\n";
 
-
-
+        System.out.println(s);
 
     }
 
 
       private static class ExampleDataProvider implements DataProvider{
+
+         final int labelIndex = 11;  // consider index 0 to 11  for input
+         final int numClasses = 1;
+
+         private Map<String,Object> dataParams;
+
+         public ExampleDataProvider(Map<String,Object> dataParams){
+            this.dataParams = dataParams;
+         }
+
+         public DataSetIteratorSplitter dataSplit(RecordReaderDataSetIterator iterator) throws IOException, InterruptedException {
+             DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
+             return splitter;
+         }
 
          public RecordReader dataPreprocess() throws IOException, InterruptedException {
              //Schema Definitions
@@ -105,12 +162,10 @@ public class HyperParamTuning {
           public DataSetIterator trainData(Map<String, Object> dataParameters) {
              try{
                  if(dataParameters!=null && !dataParameters.isEmpty()){
-                     int labelIndex = 11;  // consider index 0 to 11  for input
-                     int numClasses = 1;
-                     int batchSize = (Integer) dataParameters.get("batchSize");
-                     DataSetIterator iterator = new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses);
-                     DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
-                     return splitter.getTrainIterator();
+                     if(dataParameters.containsKey("batchSize")){
+                         int batchSize = (Integer) dataParameters.get("batchSize");
+                         return dataSplit(new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses)).getTestIterator();
+                     }
                  }
                  return null;
              }
@@ -124,12 +179,10 @@ public class HyperParamTuning {
           public DataSetIterator testData(Map<String, Object> dataParameters) {
               try{
                   if(dataParameters!=null && !dataParameters.isEmpty()){
-                      int labelIndex = 11;  // consider index 0 to 11  for input
-                      int numClasses = 1;
-                      int batchSize = (Integer) dataParameters.get("batchSize");
-                      DataSetIterator iterator = new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses);
-                      DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
-                      return splitter.getTestIterator();
+                      if(dataParameters.containsKey("batchSize")){
+                          int batchSize = (Integer) dataParameters.get("batchSize");
+                          return dataSplit(new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses)).getTestIterator();
+                      }
                   }
                   return null;
               }
@@ -140,7 +193,12 @@ public class HyperParamTuning {
 
           @Override
           public Class<?> getDataType() {
-              return RecordReaderDataSetIterator.class;
+              return DataSetIterator.class;
+          }
+
+          @Override
+          public String toString() {
+              return "ExampleDataProvider()";
           }
       }
 }

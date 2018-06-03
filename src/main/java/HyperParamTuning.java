@@ -12,6 +12,7 @@ import org.deeplearning4j.arbiter.layers.OutputLayerSpace;
 import org.deeplearning4j.arbiter.optimize.api.CandidateGenerator;
 import org.deeplearning4j.arbiter.optimize.api.ParameterSpace;
 import org.deeplearning4j.arbiter.optimize.api.data.DataProvider;
+import org.deeplearning4j.arbiter.optimize.api.data.DataSetIteratorFactoryProvider;
 import org.deeplearning4j.arbiter.optimize.api.saving.ResultSaver;
 import org.deeplearning4j.arbiter.optimize.api.score.ScoreFunction;
 import org.deeplearning4j.arbiter.optimize.api.termination.MaxCandidatesCondition;
@@ -77,7 +78,10 @@ public class HyperParamTuning {
         Map<String,Object> dataParams = new HashMap<>();
         dataParams.put("batchSize",new Integer(10));
 
-        CandidateGenerator candidateGenerator = new RandomSearchGenerator(hyperParamaterSpace);
+        Map<String,Object> commands = new HashMap<>();
+        commands.put(DataSetIteratorFactoryProvider.FACTORY_KEY,ExampleDataProvider.class.getCanonicalName());
+
+        CandidateGenerator candidateGenerator = new RandomSearchGenerator(hyperParamaterSpace,commands);
         DataProvider dataProvider = new ExampleDataProvider(dataParams);
         ResultSaver modelSaver = new FileModelSaver("resources/");
         ScoreFunction scoreFunction = new EvaluationScoreFunction(Evaluation.Metric.ACCURACY);

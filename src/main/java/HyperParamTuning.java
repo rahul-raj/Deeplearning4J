@@ -50,8 +50,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class HyperParamTuning {
-    
-    private static Logger log = LoggerFactory.getLogger("DeepLearning4j.class");
+
+    private static Logger log = LoggerFactory.getLogger("HyperParamTuning.class");
 
     public static void main(String[] args) throws IOException, InterruptedException {
 

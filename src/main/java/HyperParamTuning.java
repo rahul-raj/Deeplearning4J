@@ -30,7 +30,10 @@ import org.deeplearning4j.arbiter.task.MultiLayerNetworkTaskCreator;
 import org.deeplearning4j.arbiter.ui.listener.ArbiterStatusListener;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
+import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration;
+import org.deeplearning4j.earlystopping.termination.MaxEpochsTerminationCondition;
 import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -56,6 +59,10 @@ public class HyperParamTuning {
 
         ParameterSpace<Double> learningRateParam = new ContinuousParameterSpace(0.0001,0.01);
         ParameterSpace<Integer> layerSizeParam = new IntegerParameterSpace(15,300);
+        EarlyStoppingConfiguration<MultiLayerNetwork> earlyStoppingConfiguration = new EarlyStoppingConfiguration.Builder<MultiLayerNetwork>()
+                                                                                       .epochTerminationConditions(new MaxEpochsTerminationCondition(100))
+                                                                                       .build();
+
         MultiLayerSpace hyperParamaterSpace = new MultiLayerSpace.Builder()
                                                   .updater(new AdamSpace(learningRateParam))
                                                   .addLayer(new DenseLayerSpace.Builder()
@@ -73,6 +80,7 @@ public class HyperParamTuning {
                                                           .lossFunction(LossFunctions.LossFunction.XENT)
                                                           .nOut(1)
                                                           .build())
+                                                  .earlyStoppingConfiguration(earlyStoppingConfiguration)
                                                   .build();
 
         Map<String,Object> dataParams = new HashMap<>();

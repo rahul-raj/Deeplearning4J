@@ -4,6 +4,7 @@ import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReade
 import org.datavec.api.split.FileSplit;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
 import org.deeplearning4j.eval.Evaluation;
@@ -15,6 +16,9 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.ui.api.UIServer;
+import org.deeplearning4j.ui.stats.StatsListener;
+import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.io.ClassPathResource;
@@ -23,6 +27,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -77,7 +82,13 @@ public class DeepLearning4j {
 
         MultiLayerNetwork model = new MultiLayerNetwork(configuration);
         model.init();
-        model.setListeners(new ScoreIterationListener(100));
+
+        UIServer uiServer = UIServer.getInstance();
+        StatsStorage statsStorage = new FileStatsStorage(new File("deeplearning.dl4j"));
+        int listenerFrequency = 1;
+        model.setListeners(new StatsListener(statsStorage, listenerFrequency));
+        uiServer.attach(statsStorage);
+
         model.fit(splitter.getTrainIterator(),100);
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));
         System.out.println("args = " + evaluation.stats() + "");

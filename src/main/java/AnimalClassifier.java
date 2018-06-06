@@ -11,9 +11,11 @@ import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
+import org.nd4j.linalg.primitives.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -37,13 +39,14 @@ public class AnimalClassifier {
         ImageTransform transform2 = new FlipImageTransform(new Random(123));
         ImageTransform transform3 = new WarpImageTransform(new Random(42),42);
 
-        List<ImageTransform> transformList = new ArrayList<>();
-        transformList.add(transform1);
-        transformList.add(transform2);
-        transformList.add(transform3);
+        List<Pair<ImageTransform,Double>> pipeline = Arrays.asList(
+                new Pair<>(transform1, 0.8),
+                new Pair<>(transform2, 0.7),
+                new Pair<>(transform3, 0.5)
+        );
+
 
         DataNormalization scaler = new ImagePreProcessingScaler(0,1);
-
 
         ImageRecordReader imageRecordReader = new ImageRecordReader(100,100,channels,parentPathLabelGenerator);
         imageRecordReader.initialize(trainData,null);

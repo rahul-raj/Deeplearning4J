@@ -57,10 +57,10 @@ public class DeepLearning4j {
 
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 1;
-        int batchSize = 10;
+        int batchSize = 100;
 
         DataSetIterator iterator = new RecordReaderDataSetIterator(transformProcessRecordReader,batchSize,labelIndex,numClasses);
-        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
+        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,100,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
 

@@ -34,10 +34,14 @@ import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration;
 import org.deeplearning4j.earlystopping.scorecalc.DataSetLossCalculator;
 import org.deeplearning4j.earlystopping.termination.MaxEpochsTerminationCondition;
 import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.nn.conf.distribution.LogNormalDistribution;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.nd4j.linalg.io.ClassPathResource;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
@@ -67,6 +71,7 @@ public class HyperParamTuning {
 */
         MultiLayerSpace hyperParamaterSpace = new MultiLayerSpace.Builder()
                                                   .updater(new AdamSpace(learningRateParam))
+                                                //  .weightInit(WeightInit.DISTRIBUTION).dist(new LogNormalDistribution())
                                                   .addLayer(new DenseLayerSpace.Builder()
                                                           .activation(Activation.RELU)
                                                           .nIn(11)
@@ -142,6 +147,9 @@ public class HyperParamTuning {
          }
 
          public DataSetIteratorSplitter dataSplit(RecordReaderDataSetIterator iterator) throws IOException, InterruptedException {
+             DataNormalization dataNormalization = new NormalizerStandardize();
+             dataNormalization.fit(iterator);
+             iterator.setPreProcessor(dataNormalization);
              DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
              return splitter;
          }

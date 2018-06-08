@@ -21,6 +21,8 @@ import org.deeplearning4j.ui.stats.StatsListener;
 import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.nd4j.linalg.io.ClassPathResource;
 import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
@@ -62,19 +64,21 @@ public class DeepLearning4j {
 
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 1;
-        int batchSize = 100;
+        int batchSize = 10;
 
         DataSetIterator iterator = new RecordReaderDataSetIterator(transformProcessRecordReader,batchSize,labelIndex,numClasses);
-        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,100,0.8);
+        DataNormalization dataNormalization = new NormalizerStandardize();
+        dataNormalization.fit(iterator);
+        iterator.setPreProcessor(dataNormalization);
+        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
 
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
-                .seed(123)
-                .updater(new Adam(0.01))
+                .updater(new Adam(0.0001D))
                 .list()
-                .layer(new DenseLayer.Builder().nIn(11).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())
-                .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-0.05,0.05)).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(11).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new OutputLayer.Builder(LossFunctions.LossFunction.XENT)
                         .nIn(6).nOut(1).weightInit(WeightInit.UNIFORM).activation(Activation.SIGMOID).build())
                 .backprop(true).pretrain(false)
@@ -83,11 +87,12 @@ public class DeepLearning4j {
         MultiLayerNetwork model = new MultiLayerNetwork(configuration);
         model.init();
 
-        UIServer uiServer = UIServer.getInstance();
+       /* UIServer uiServer = UIServer.getInstance();
         StatsStorage statsStorage = new FileStatsStorage(new File("deeplearning.dl4j"));
         int listenerFrequency = 1;
         model.setListeners(new StatsListener(statsStorage, listenerFrequency));
-        uiServer.attach(statsStorage);
+        uiServer.attach(statsStorage);*/
+        model.setListeners(new ScoreIterationListener(100));
 
         model.fit(splitter.getTrainIterator(),100);
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));

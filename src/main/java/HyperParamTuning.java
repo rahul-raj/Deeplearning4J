@@ -89,7 +89,7 @@ public class HyperParamTuning {
         Map<String,Object> commands = new HashMap<>();
         commands.put(DataSetIteratorFactoryProvider.FACTORY_KEY,ExampleDataProvider.class.getCanonicalName());
 
-        CandidateGenerator candidateGenerator = new RandomSearchGenerator(hyperParamaterSpace,commands);
+        CandidateGenerator candidateGenerator = new RandomSearchGenerator(hyperParamaterSpace,dataParams);
         DataProvider dataProvider = new ExampleDataProvider(dataParams);
         ResultSaver modelSaver = new FileModelSaver("resources/");
         ScoreFunction scoreFunction = new EvaluationScoreFunction(Evaluation.Metric.ACCURACY);
@@ -171,7 +171,7 @@ public class HyperParamTuning {
          }
 
           @Override
-          public DataSetIterator trainData(Map<String, Object> dataParameters) {
+          public DataSetIterator trainData(Map<String, Object> dataParameters){
              try{
                  if(dataParameters!=null && !dataParameters.isEmpty()){
                      if(dataParameters.containsKey("batchSize")){
@@ -179,12 +179,13 @@ public class HyperParamTuning {
                          return dataSplit(new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses)).getTestIterator();
                      }
                  }
-                 return null;
+                 else
+                   return null;
              }
              catch(Exception e){
                  throw new RuntimeException();
              }
-
+             return null;
           }
 
           @Override

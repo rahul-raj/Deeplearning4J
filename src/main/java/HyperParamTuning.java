@@ -31,6 +31,7 @@ import org.deeplearning4j.arbiter.ui.listener.ArbiterStatusListener;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
 import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration;
+import org.deeplearning4j.earlystopping.scorecalc.DataSetLossCalculator;
 import org.deeplearning4j.earlystopping.termination.MaxEpochsTerminationCondition;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -58,16 +59,17 @@ public class HyperParamTuning {
 
 
         ParameterSpace<Double> learningRateParam = new ContinuousParameterSpace(0.0001,0.01);
-        ParameterSpace<Integer> layerSizeParam = new IntegerParameterSpace(15,300);
-        EarlyStoppingConfiguration<MultiLayerNetwork> earlyStoppingConfiguration = new EarlyStoppingConfiguration.Builder<MultiLayerNetwork>()
+        ParameterSpace<Integer> layerSizeParam = new IntegerParameterSpace(5,11);
+      /*  EarlyStoppingConfiguration<MultiLayerNetwork> earlyStoppingConfiguration = new EarlyStoppingConfiguration.Builder<MultiLayerNetwork>()
                                                                                        .epochTerminationConditions(new MaxEpochsTerminationCondition(100))
+                                                                                       .scoreCalculator(new DataSetLossCalculator(new ExampleDataProvider()))
                                                                                        .build();
-
+*/
         MultiLayerSpace hyperParamaterSpace = new MultiLayerSpace.Builder()
                                                   .updater(new AdamSpace(learningRateParam))
                                                   .addLayer(new DenseLayerSpace.Builder()
                                                           .activation(Activation.RELU)
-                                                          .nIn(layerSizeParam)
+                                                          .nIn(11)
                                                           .nOut(layerSizeParam)
                                                           .build())
                                                   .addLayer(new DenseLayerSpace.Builder()
@@ -80,7 +82,7 @@ public class HyperParamTuning {
                                                           .lossFunction(LossFunctions.LossFunction.XENT)
                                                           .nOut(1)
                                                           .build())
-                                                  .earlyStoppingConfiguration(earlyStoppingConfiguration)
+                                               //   .earlyStoppingConfiguration(earlyStoppingConfiguration)
                                                   .build();
 
         Map<String,Object> dataParams = new HashMap<>();

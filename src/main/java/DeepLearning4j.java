@@ -87,12 +87,12 @@ public class DeepLearning4j {
         MultiLayerNetwork model = new MultiLayerNetwork(configuration);
         model.init();
 
-       /* UIServer uiServer = UIServer.getInstance();
+        UIServer uiServer = UIServer.getInstance();
         StatsStorage statsStorage = new FileStatsStorage(new File("deeplearning.dl4j"));
         int listenerFrequency = 1;
         model.setListeners(new StatsListener(statsStorage, listenerFrequency));
-        uiServer.attach(statsStorage);*/
-        model.setListeners(new ScoreIterationListener(100));
+        uiServer.attach(statsStorage);
+        //model.setListeners(new ScoreIterationListener(100));
 
         model.fit(splitter.getTrainIterator(),100);
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));

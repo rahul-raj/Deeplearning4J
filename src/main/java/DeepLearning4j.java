@@ -27,7 +27,11 @@ import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.io.ClassPathResource;
+import org.nd4j.linalg.learning.SgdUpdater;
 import org.nd4j.linalg.learning.config.Adam;
+import org.nd4j.linalg.learning.config.Nesterovs;
+import org.nd4j.linalg.learning.config.RmsProp;
+import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.lossfunctions.impl.LossMCXENT;
 import org.slf4j.Logger;
@@ -78,11 +82,9 @@ public class DeepLearning4j {
         DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
-
-
-        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
+        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(1e-4)
                 .weightInit(WeightInit.RELU_UNIFORM)
-                .updater(new Adam(0.018D))
+                .updater(new Nesterovs(0.006,0.9)) // new Adam(0.015D); new RmsProp(0.08D)
                 .list()
                 .layer(new DenseLayer.Builder().nIn(11).nOut(8).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new DenseLayer.Builder().nIn(8).nOut(6).activation(Activation.RELU).dropOut(0.9).build())

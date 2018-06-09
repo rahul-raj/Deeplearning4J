@@ -69,7 +69,7 @@ public class DeepLearning4j {
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 2;
         int batchSize = 10;
-        INDArray weightsArray = Nd4j.create(new double[]{0.5, 0.85});
+        INDArray weightsArray = Nd4j.create(new double[]{0.5, 0.75});
 
         DataSetIterator iterator = new RecordReaderDataSetIterator(transformProcessRecordReader,batchSize,labelIndex,numClasses);
         DataNormalization dataNormalization = new NormalizerStandardize();

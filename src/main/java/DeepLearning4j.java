@@ -81,13 +81,14 @@ public class DeepLearning4j {
 
 
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder()
+                .weightInit(WeightInit.RELU_UNIFORM)
                 .updater(new Adam(0.018D))
                 .list()
-                .layer(new DenseLayer.Builder().nIn(11).nOut(8).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
-                .layer(new DenseLayer.Builder().nIn(8).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
-                .layer(new DenseLayer.Builder().nIn(6).nOut(6).weightInit(WeightInit.UNIFORM).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(11).nOut(8).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(8).nOut(6).activation(Activation.RELU).dropOut(0.9).build())
+                .layer(new DenseLayer.Builder().nIn(6).nOut(6).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new OutputLayer.Builder(new LossMCXENT(weightsArray))
-                        .nIn(6).nOut(2).weightInit(WeightInit.UNIFORM).activation(Activation.SOFTMAX).build())
+                        .nIn(6).nOut(2).activation(Activation.SOFTMAX).build())
                 .backprop(true).pretrain(false)
                 .build();
 

@@ -51,6 +51,13 @@
             <version>1.0.0-beta</version>
         </dependency>
         <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-data</artifactId>
+            <version>1.0.0-beta</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.25</version>

@@ -24,12 +24,14 @@ import org.deeplearning4j.arbiter.optimize.parameter.continuous.ContinuousParame
 import org.deeplearning4j.arbiter.optimize.parameter.integer.IntegerParameterSpace;
 import org.deeplearning4j.arbiter.optimize.runner.IOptimizationRunner;
 import org.deeplearning4j.arbiter.optimize.runner.LocalOptimizationRunner;
+import org.deeplearning4j.arbiter.optimize.runner.listener.impl.LoggingStatusListener;
 import org.deeplearning4j.arbiter.saver.local.FileModelSaver;
 import org.deeplearning4j.arbiter.scoring.impl.EvaluationScoreFunction;
 import org.deeplearning4j.arbiter.task.MultiLayerNetworkTaskCreator;
 import org.deeplearning4j.arbiter.ui.listener.ArbiterStatusListener;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
+import org.deeplearning4j.datasets.iterator.ReconstructionDataSetIterator;
 import org.deeplearning4j.earlystopping.EarlyStoppingConfiguration;
 import org.deeplearning4j.earlystopping.scorecalc.DataSetLossCalculator;
 import org.deeplearning4j.earlystopping.termination.MaxEpochsTerminationCondition;
@@ -39,6 +41,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
@@ -117,8 +120,8 @@ public class HyperParamTuning {
                                                                .build();
 
         IOptimizationRunner runner = new LocalOptimizationRunner(optimizationConfiguration,new MultiLayerNetworkTaskCreator());
-        StatsStorage ss = new FileStatsStorage(new File("HyperParamOptimizationStats.dl4j"));
-        runner.addListeners(new ArbiterStatusListener(ss));
+       // StatsStorage ss = new FileStatsStorage(new File("HyperParamOptimizationStats.dl4j"));
+        runner.addListeners(new LoggingStatusListener()); //new ArbiterStatusListener(ss)
         runner.execute();
 
         //Print the best hyper params
@@ -146,7 +149,7 @@ public class HyperParamTuning {
             this.dataParams = dataParams;
          }
 
-         public DataSetIteratorSplitter dataSplit(RecordReaderDataSetIterator iterator) throws IOException, InterruptedException {
+         public DataSetIteratorSplitter dataSplit(DataSetIterator iterator) throws IOException, InterruptedException {
              DataNormalization dataNormalization = new NormalizerStandardize();
              dataNormalization.fit(iterator);
              iterator.setPreProcessor(dataNormalization);
@@ -180,13 +183,15 @@ public class HyperParamTuning {
              return transformProcessRecordReader;
          }
 
+
           @Override
           public DataSetIterator trainData(Map<String, Object> dataParameters){
              try{
                  if(dataParameters!=null && !dataParameters.isEmpty()){
                      if(dataParameters.containsKey("batchSize")){
                          int batchSize = (Integer) dataParameters.get("batchSize");
-                         return dataSplit(new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses)).getTestIterator();
+                         DataSetIterator iterator = new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses);
+                         return dataSplit(iterator).getTestIterator();
                      }
                  }
                  else
@@ -204,7 +209,8 @@ public class HyperParamTuning {
                   if(dataParameters!=null && !dataParameters.isEmpty()){
                       if(dataParameters.containsKey("batchSize")){
                           int batchSize = (Integer) dataParameters.get("batchSize");
-                          return dataSplit(new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses)).getTestIterator();
+                          DataSetIterator iterator = new RecordReaderDataSetIterator(dataPreprocess(),batchSize,labelIndex,numClasses);
+                          return dataSplit(iterator).getTestIterator();
                       }
                   }
                   return null;

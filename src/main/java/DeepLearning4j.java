@@ -72,18 +72,18 @@ public class DeepLearning4j {
 
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 2;
-        int batchSize = 10;
-        INDArray weightsArray = Nd4j.create(new double[]{0.5, 0.75});
+        int batchSize = 8;
+        INDArray weightsArray = Nd4j.create(new double[]{0.57, 0.75});
 
         DataSetIterator iterator = new RecordReaderDataSetIterator(transformProcessRecordReader,batchSize,labelIndex,numClasses);
         DataNormalization dataNormalization = new NormalizerStandardize();
         dataNormalization.fit(iterator);
         iterator.setPreProcessor(dataNormalization);
-        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
+        DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1250,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
 
-        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(.0003)
+        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(.0005)
                 .weightInit(WeightInit.RELU_UNIFORM)
                 .updater(new Nesterovs(0.008,0.9)) // new Adam(0.015D); new RmsProp(0.08D)
                 .list()
@@ -105,7 +105,7 @@ public class DeepLearning4j {
         uiServer.attach(statsStorage);*/
         model.setListeners(new ScoreIterationListener(100));
 
-        model.fit(splitter.getTrainIterator(),1000);
+        model.fit(splitter.getTrainIterator(),100);
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));
         System.out.println("args = " + evaluation.stats() + "");
 

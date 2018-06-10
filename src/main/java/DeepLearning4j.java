@@ -82,9 +82,10 @@ public class DeepLearning4j {
         DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1000,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
-        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(1e-4)
+
+        MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(.0003)
                 .weightInit(WeightInit.RELU_UNIFORM)
-                .updater(new Nesterovs(0.006,0.9)) // new Adam(0.015D); new RmsProp(0.08D)
+                .updater(new Nesterovs(0.008,0.9)) // new Adam(0.015D); new RmsProp(0.08D)
                 .list()
                 .layer(new DenseLayer.Builder().nIn(11).nOut(8).activation(Activation.RELU).dropOut(0.9).build())
                 .layer(new DenseLayer.Builder().nIn(8).nOut(6).activation(Activation.RELU).dropOut(0.9).build())

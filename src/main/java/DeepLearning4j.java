@@ -105,7 +105,7 @@ public class DeepLearning4j {
         uiServer.attach(statsStorage);*/
         model.setListeners(new ScoreIterationListener(100));
 
-        model.fit(splitter.getTrainIterator(),100);
+        model.fit(splitter.getTrainIterator(),1000);
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));
         System.out.println("args = " + evaluation.stats() + "");
 

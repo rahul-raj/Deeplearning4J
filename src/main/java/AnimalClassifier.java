@@ -56,13 +56,14 @@ public class AnimalClassifier {
         ImageTransform transform = new PipelineImageTransform(pipeline);
         DataNormalization scaler = new ImagePreProcessingScaler(0,1);
 
-
+        
 
         ImageRecordReader imageRecordReader = new ImageRecordReader(100,100,channels,parentPathLabelGenerator);
         imageRecordReader.initialize(trainData,null);
         DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize);
         scaler.fit(dataSetIterator);
         dataSetIterator.setPreProcessor(scaler);
+
 
     }
 }

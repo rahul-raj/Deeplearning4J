@@ -83,6 +83,7 @@ public class DeepLearning4j {
 
         log.info("Building Model------------------->>>>>>>>>");
 
+
         MultiLayerConfiguration configuration = new NeuralNetConfiguration.Builder().l2(.0005)
                 .weightInit(WeightInit.RELU_UNIFORM)
                 .updater(new Nesterovs(0.008,0.9)) // new Adam(0.015D); new RmsProp(0.08D)

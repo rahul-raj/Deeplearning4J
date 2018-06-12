@@ -38,7 +38,7 @@ public class AnimalClassifier {
         int batchSize=10;
 
         //load files and split
-        File parentDir = new File("C:/Users/Rahul_Raj05/Downloads/imagenet");
+        File parentDir = new File("C:/Users/Admin/Downloads/imagenet");
         FileSplit fileSplit = new FileSplit(parentDir, NativeImageLoader.ALLOWED_FORMATS,new Random(42));
         int numLabels = fileSplit.getRootDir().listFiles(File::isDirectory).length;
 
@@ -74,7 +74,7 @@ public class AnimalClassifier {
                                              .list()
                                              .layer(new ConvolutionLayer.Builder(5,5)
                                                         .nIn(channels)
-                                                        .nOut(50)
+                                                        .nOut(30)
                                                         .stride(1,1)
                                                         .activation(Activation.RELU)
                                                         .build())
@@ -83,7 +83,7 @@ public class AnimalClassifier {
                                                         .kernelSize(2,2)
                                                         .build())
                                              .layer(new ConvolutionLayer.Builder(5,5)
-                                                        .nOut(50)
+                                                        .nOut(30)
                                                         .stride(1,1)
                                                         .activation(Activation.RELU)
                                                         .build())
@@ -99,13 +99,13 @@ public class AnimalClassifier {
                                                         .nOut(numLabels)
                                                         .activation(Activation.SOFTMAX)
                                                         .build())
-                                             .setInputType(InputType.convolutionalFlat(100,100,3))
+                                             .setInputType(InputType.convolutionalFlat(30,30,3))
                                              .backprop(true).pretrain(false)
                                              .build();
 
 
         //train without transformations
-        ImageRecordReader imageRecordReader = new ImageRecordReader(100,100,channels,parentPathLabelGenerator);
+        ImageRecordReader imageRecordReader = new ImageRecordReader(30,30,channels,parentPathLabelGenerator);
         imageRecordReader.initialize(trainData,null);
         DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);
         scaler.fit(dataSetIterator);

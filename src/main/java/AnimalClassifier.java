@@ -9,9 +9,20 @@ import org.datavec.image.transform.ImageTransform;
 import org.datavec.image.transform.PipelineImageTransform;
 import org.datavec.image.transform.WarpImageTransform;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
+import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
+import org.deeplearning4j.nn.conf.inputs.InputType;
+import org.deeplearning4j.nn.conf.layers.*;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
+import org.nd4j.linalg.learning.config.Nesterovs;
+import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.primitives.Pair;
 
 import java.io.File;
@@ -27,8 +38,9 @@ public class AnimalClassifier {
         int batchSize=10;
 
         //load files and split
-        File parentDir = new File("C:/Users/Admin/Downloads/imagenet");
+        File parentDir = new File("C:/Users/Rahul_Raj05/Downloads/imagenet");
         FileSplit fileSplit = new FileSplit(parentDir, NativeImageLoader.ALLOWED_FORMATS,new Random(42));
+        int numLabels = fileSplit.getRootDir().listFiles(File::isDirectory).length;
 
         //identify labels in the path
         ParentPathLabelGenerator parentPathLabelGenerator = new ParentPathLabelGenerator();
@@ -56,13 +68,68 @@ public class AnimalClassifier {
         ImageTransform transform = new PipelineImageTransform(pipeline);
         DataNormalization scaler = new ImagePreProcessingScaler(0,1);
 
-        
+        MultiLayerConfiguration config = new NeuralNetConfiguration.Builder()
+                                             .weightInit(WeightInit.XAVIER)
+                                             .updater(new Nesterovs(0.008D,0.9D))
+                                             .list()
+                                             .layer(new ConvolutionLayer.Builder(5,5)
+                                                        .nIn(channels)
+                                                        .nOut(50)
+                                                        .stride(1,1)
+                                                        .activation(Activation.RELU)
+                                                        .build())
+                                             .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
+                                                        .stride(2,2)
+                                                        .kernelSize(2,2)
+                                                        .build())
+                                             .layer(new ConvolutionLayer.Builder(5,5)
+                                                        .nOut(50)
+                                                        .stride(1,1)
+                                                        .activation(Activation.RELU)
+                                                        .build())
+                                             .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
+                                                        .stride(2,2)
+                                                        .kernelSize(2,2)
+                                                        .build())
+                                             .layer(new DenseLayer.Builder()
+                                                        .nOut(500)
+                                                        .activation(Activation.RELU)
+                                                        .build())
+                                             .layer(new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                                                        .nOut(numLabels)
+                                                        .activation(Activation.SOFTMAX)
+                                                        .build())
+                                             .setInputType(InputType.convolutionalFlat(100,100,3))
+                                             .backprop(true).pretrain(false)
+                                             .build();
 
+
+        //train without transformations
         ImageRecordReader imageRecordReader = new ImageRecordReader(100,100,channels,parentPathLabelGenerator);
         imageRecordReader.initialize(trainData,null);
-        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize);
+        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);
         scaler.fit(dataSetIterator);
         dataSetIterator.setPreProcessor(scaler);
+        MultiLayerNetwork model = new MultiLayerNetwork(config);
+        model.init();
+        model.setListeners(new ScoreIterationListener(100));
+        model.fit(dataSetIterator,100);
+
+        //train with transformations
+        imageRecordReader.initialize(trainData,transform);
+        dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);
+        scaler.fit(dataSetIterator);
+        dataSetIterator.setPreProcessor(scaler);
+        model.fit(dataSetIterator,100);
+
+        imageRecordReader.initialize(testData);
+        dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);
+        scaler.fit(dataSetIterator);
+        dataSetIterator.setPreProcessor(scaler);
+
+        Evaluation evaluation = model.evaluate(dataSetIterator);
+        System.out.println("args = [" + evaluation.stats() + "]");
+
 
 
     }

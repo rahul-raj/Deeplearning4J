@@ -22,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>DeepLearning4j</mainClass>
+                            <mainClass>AnimalClassifier</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

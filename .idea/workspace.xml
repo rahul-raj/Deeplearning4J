@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17da3bd1-98c8-462a-810d-2c48ad1e3b27" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/AnimalClassifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AnimalClassifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DeepLearning4j.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DeepLearning4j.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,11 +14,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AnimalClassifier.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AnimalClassifier.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/AnimalClassifier.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="133" column="61" selection-start-line="133" selection-start-column="61" selection-end-line="133" selection-end-column="61" />
+            <state relative-caret-position="75">
+              <caret line="125" column="47" lean-forward="true" selection-start-line="125" selection-start-column="47" selection-end-line="125" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="193">
+              <caret line="24" column="55" selection-start-line="24" selection-start-column="55" selection-end-line="24" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -60,6 +68,7 @@
         <option value="$PROJECT_DIR$/src/main/java/HyperParamTuning.java" />
         <option value="$PROJECT_DIR$/src/main/java/DeepLearning4j.java" />
         <option value="$PROJECT_DIR$/src/main/java/AnimalClassifier.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -331,13 +340,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/deeplearning4j/deeplearning4j-nn/1.0.0-beta/deeplearning4j-nn-1.0.0-beta.jar!/org/deeplearning4j/nn/conf/layers/BaseLayer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="386" column="17" selection-start-line="386" selection-start-column="17" selection-end-line="386" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/deeplearning4j/arbiter-deeplearning4j/1.0.0-beta/arbiter-deeplearning4j-1.0.0-beta.jar!/org/deeplearning4j/arbiter/task/MultiLayerNetworkTaskCreator.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -661,6 +663,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_141/jre/lib/rt.jar!/java/io/FileFilter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/DeepLearning4j.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -671,17 +680,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_141/jre/lib/rt.jar!/java/io/FileFilter.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/AnimalClassifier.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+        <state relative-caret-position="75">
+          <caret line="125" column="47" lean-forward="true" selection-start-line="125" selection-start-column="47" selection-end-line="125" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/AnimalClassifier.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="133" column="61" selection-start-line="133" selection-start-column="61" selection-end-line="133" selection-end-column="61" />
+        <state relative-caret-position="193">
+          <caret line="24" column="55" selection-start-line="24" selection-start-column="55" selection-end-line="24" selection-end-column="55" />
         </state>
       </provider>
     </entry>

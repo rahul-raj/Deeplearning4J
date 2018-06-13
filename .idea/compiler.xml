@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="dl4j" target="8" />
+      <module name="dl4j" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -17,6 +17,7 @@ import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
@@ -129,6 +130,8 @@ public class AnimalClassifier {
 
         Evaluation evaluation = model.evaluate(dataSetIterator);
         System.out.println("args = [" + evaluation.stats() + "]");
+
+        ModelSerializer.writeModel(model,new File("cnntrainedmodel.zip"),true);
 
 
 

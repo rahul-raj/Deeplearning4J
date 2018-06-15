@@ -16,6 +16,7 @@ import org.deeplearning4j.nn.conf.inputs.InputType;
 import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.optimize.listeners.PerformanceListener;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
@@ -113,7 +114,7 @@ public class AnimalClassifier {
         dataSetIterator.setPreProcessor(scaler);
         MultiLayerNetwork model = new MultiLayerNetwork(config);
         model.init();
-        model.setListeners(new ScoreIterationListener(100));
+        model.setListeners(new PerformanceListener(100));
         model.fit(dataSetIterator,100);
 
         //train with transformations

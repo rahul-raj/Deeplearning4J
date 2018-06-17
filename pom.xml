@@ -7,9 +7,6 @@
     <groupId>dl4j</groupId>
     <artifactId>dl4j</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <properties>
-        <nd4j.backend>nd4j-cuda-8.0-platform</nd4j.backend>
-    </properties>
     <build>
         <plugins>
             <plugin>
@@ -41,9 +38,19 @@
             <artifactId>deeplearning4j-core</artifactId>
             <version>1.0.0-beta</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
+            <version>1.0.0-beta</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-cuda-9.1-platform</artifactId>
+            <version>1.0.0-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-cuda-9.1</artifactId>
             <version>1.0.0-beta</version>
         </dependency>
         <dependency>

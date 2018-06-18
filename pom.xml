@@ -38,6 +38,8 @@
             <artifactId>deeplearning4j-core</artifactId>
             <version>1.0.0-beta</version>
         </dependency>
+        <!-- Currently maven is configured to use GPU instead of CPU -->
+        <!-- Uncomment nd4j-native dependency and comment nd4j/dl4j cuda dependencies to run on CPU-->
 <!--        <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>

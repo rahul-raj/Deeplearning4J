@@ -15,6 +15,7 @@ import org.datavec.spark.transform.AnalyzeSpark;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.io.ClassPathResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,27 +39,22 @@ public class SantanderValuePrediction {
                                                                 .removeColumns("ID")
                                                                 .build();
         RecordReader recordReader = new CSVRecordReader(1,',');
-        recordReader.initialize(new FileSplit(new File("C:/Users/Admin/Downloads/test/train.csv")));
+        recordReader.initialize(new FileSplit(new ClassPathResource("train.csv").getFile()));
         TransformProcessRecordReader transformProcessRecordReader = new TransformProcessRecordReader(recordReader,transformProcess);
-/*
+
 
         SparkConf sparkConf = new SparkConf();
+        sparkConf.setMaster("local[*]");
+        sparkConf.setAppName("Santander App");
         JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
-        JavaRDD<String> directory = javaSparkContext.textFile(new File("C:/Users/Admin/Downloads/test/train.csv").getParent());
+        JavaRDD<String> directory = javaSparkContext.textFile(new ClassPathResource("train.csv").getFile().getParent());
         JavaRDD<List<Writable>> parsedData = directory.map(new StringToWritablesFunction(transformProcessRecordReader));
 
         DataAnalysis dataAnalysis = AnalyzeSpark.analyze(schema,parsedData);
         System.out.println("args = [" + dataAnalysis + "]");
 
-*/
 
 
-            for(int i=0;i<=4990;i++){
-                while(transformProcessRecordReader.hasNext()) {
-                      
-                }
-
-            }
 
 
 

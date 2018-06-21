@@ -39,13 +39,13 @@
             <version>1.0.0-beta</version>
         </dependency>
         <!-- Currently maven is configured to use GPU instead of CPU -->
-        <!-- Uncomment nd4j-native dependency and comment nd4j/dl4j cuda dependencies to run on CPU-->
-<!--        <dependency>
+        <!-- Uncomment nd4j-native dependency and comment nd4j/dl4j cuda dependencies to run on CPU -->
+        <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
             <version>1.0.0-beta</version>
-        </dependency>-->
-        <dependency>
+        </dependency>
+        <!--<dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-cuda-9.1-platform</artifactId>
             <version>1.0.0-beta</version>
@@ -54,7 +54,7 @@
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-cuda-9.1</artifactId>
             <version>1.0.0-beta</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>arbiter-deeplearning4j</artifactId>
@@ -80,6 +80,16 @@
             <artifactId>deeplearning4j-data</artifactId>
             <version>1.0.0-beta</version>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.datavec</groupId>
+            <artifactId>datavec-api</artifactId>
+            <version>1.0.0-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datavec</groupId>
+            <artifactId>datavec-spark_2.11</artifactId>
+            <version>1.0.0-beta_spark_2</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

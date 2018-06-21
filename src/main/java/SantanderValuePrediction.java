@@ -21,7 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SantanderValuePrediction {
 
@@ -48,14 +51,26 @@ public class SantanderValuePrediction {
         sparkConf.setAppName("Santander App");
         JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
         JavaRDD<String> directory = javaSparkContext.textFile(new ClassPathResource("train.csv").getFile().getParent());
-        JavaRDD<List<Writable>> parsedData = directory.map(new StringToWritablesFunction(transformProcessRecordReader));
+        JavaRDD<List<Writable>> parsedData = directory.map(new StringToWritablesFunction(new CSVRecordReader()));
 
         DataAnalysis dataAnalysis = AnalyzeSpark.analyze(schema,parsedData);
         System.out.println("args = [" + dataAnalysis + "]");
 
 
 
+/*
+            List<Integer> constantFeaturesIndex = new ArrayList<>();
 
+            for(int i=1;i<=4991;i++){
+                Set<Double> constantSet = new HashSet<>();
+                while(transformProcessRecordReader.hasNext()) {
+                     constantSet.add(transformProcessRecordReader.next().get(i).toDouble());
+                }
+                if(constantSet.size()==1){
+                  constantFeaturesIndex.add(i);
+                }
+            }
+*/
 
 
 

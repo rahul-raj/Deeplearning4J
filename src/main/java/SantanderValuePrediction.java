@@ -59,18 +59,6 @@ public class SantanderValuePrediction {
 
 
 
-/*        TransformProcessRecordReader transformProcessRecordReader = new TransformProcessRecordReader(recordReader,transformProcess);
-        //System.out.println("args = [" + recordReader.next().get(1).toString() + "]");
-        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(transformProcessRecordReader,10,0,0,true);
-        System.out.println("args = [" + dataSetIterator.next()+ "]");
-        */
-
-
-     //   RecordReader transformProcessRecordReader = new TransformProcessRecordReader(recordReader,transformProcess);
-
-      //  int batchSize=10;
-      //  DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,10,1,2,true);
-      //  System.out.println("args = [" + dataSetIterator.next() + "]");
 
     }
 }

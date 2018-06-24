@@ -8,3 +8,5 @@ Three Projects included so far:
 2) [Animal classification using CNN (no pre-built model)](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/AnimalClassifier.java)
 
 3) [HyperParameter tuning using Java](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/HyperParamTuning.java)
+
+4) [Santander Value Prediction Kaggle Challenge (Data pre-processing so far)](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/SantanderValuePrediction.java)

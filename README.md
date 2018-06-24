@@ -1,7 +1,7 @@
 # Deeplearning4J
 This is a java deep learning project repository with DL4J based projects made from scratch.
 
-Three Projects included so far:
+Projects included so far:
 
 1) [Customer loss prediction using standard feed forward network](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/DeepLearning4j.java)
 

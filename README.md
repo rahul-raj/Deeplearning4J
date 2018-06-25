@@ -8,7 +8,7 @@ This is a java deep learning project repository with DL4J based projects made fr
 Projects included so far:
 
 ## 1) [Customer loss prediction using standard feed forward network]
-(https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/DeepLearning4j.java)
+(https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/CustomerLossPrediction.java)
 
  [![DL4J - Customer Loss prediction example](https://img.youtube.com/vi/DGllOCWL5w0/0.jpg)](https://www.youtube.com/watch?v=DGllOCWL5w0)
  

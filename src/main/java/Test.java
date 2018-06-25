@@ -38,7 +38,7 @@ import java.util.List;
 
 public class Test {
 
-    private static Logger log = LoggerFactory.getLogger("DeepLearning4j.class");
+    private static Logger log = LoggerFactory.getLogger("CustomerLossPrediction.class");
     public static void main(String[] args) throws IOException, InterruptedException, InvalidKerasConfigurationException, UnsupportedKerasConfigurationException {
 
         Schema schema = new Schema.Builder()

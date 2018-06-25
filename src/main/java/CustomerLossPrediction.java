@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class DeepLearning4j {
+public class CustomerLossPrediction {
 
-    private static Logger log = LoggerFactory.getLogger("DeepLearning4j.class");
+    private static Logger log = LoggerFactory.getLogger("CustomerLossPrediction.class");
 
     public static void main(String[] args) throws IOException, InterruptedException {
 

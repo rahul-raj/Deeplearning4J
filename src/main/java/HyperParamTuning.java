@@ -54,11 +54,6 @@ public class HyperParamTuning {
 
         ParameterSpace<Double> learningRateParam = new ContinuousParameterSpace(0.0001,0.01);
         ParameterSpace<Integer> layerSizeParam = new IntegerParameterSpace(5,11);
-      /*  EarlyStoppingConfiguration<MultiLayerNetwork> earlyStoppingConfiguration = new EarlyStoppingConfiguration.Builder<MultiLayerNetwork>()
-                                                                                       .epochTerminationConditions(new MaxEpochsTerminationCondition(100))
-                                                                                       .scoreCalculator(new DataSetLossCalculator(new ExampleDataProvider()))
-                                                                                       .build();
-*/
         MultiLayerSpace hyperParamaterSpace = new MultiLayerSpace.Builder()
                                                   .updater(new AdamSpace(learningRateParam))
                                                 //  .weightInit(WeightInit.DISTRIBUTION).dist(new LogNormalDistribution())
@@ -77,7 +72,6 @@ public class HyperParamTuning {
                                                           .lossFunction(LossFunctions.LossFunction.XENT)
                                                           .nOut(1)
                                                           .build())
-                                               //   .earlyStoppingConfiguration(earlyStoppingConfiguration)
                                                   .build();
 
         Map<String,Object> dataParams = new HashMap<>();
@@ -107,6 +101,7 @@ public class HyperParamTuning {
                                                                .build();
 
         IOptimizationRunner runner = new LocalOptimizationRunner(optimizationConfiguration,new MultiLayerNetworkTaskCreator());
+        //Uncomment this if you want to store the model.
        // StatsStorage ss = new FileStatsStorage(new File("HyperParamOptimizationStats.dl4j"));
         runner.addListeners(new LoggingStatusListener()); //new ArbiterStatusListener(ss)
         runner.execute();

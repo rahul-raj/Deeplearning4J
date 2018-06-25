@@ -87,13 +87,9 @@ public class DeepLearning4j {
         MultiLayerNetwork model = new MultiLayerNetwork(configuration);
         model.init();
 
-/*        UIServer uiServer = UIServer.getInstance();
-        StatsStorage statsStorage = new FileStatsStorage(new File("deeplearning.dl4j"));
-        int listenerFrequency = 1;
-        model.setListeners(new StatsListener(statsStorage, listenerFrequency));
-        uiServer.attach(statsStorage);*/
         model.setListeners(new ScoreIterationListener(100));
 
+        //Benchmarking: Reduce/Frequent calls to garbage collector
         //Nd4j.getMemoryManager().setAutoGcWindow(10000);
         //Nd4j.getMemoryManager().togglePeriodicGc(false);
 

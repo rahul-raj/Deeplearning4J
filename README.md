@@ -12,6 +12,7 @@ Projects included so far:
 (https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/DeepLearning4j.java)
 
 Code execution:
+
  [![DL4J - Customer Loss prediction example](https://img.youtube.com/vi/DGllOCWL5w0/0.jpg)](https://www.youtube.com/watch?v=DGllOCWL5w0)
  
 Given **n** labels defined, obtain the probability of a customer who leaves the bank. The problem statement is taken from a course driven by superdatasciene team. They discuss Keras implementation for the same while this is a small attempt to do the same with Java. Keras has managed to obtain 83% consistent accuracy however DL4J model outperform Keras as it gives 85.5% of consistent accuracy. 
@@ -34,6 +35,7 @@ A bug has been reported to DL4J while I was coding this one, however they made a
 Code fix has been done. Until a new version of DL4J is released, change your pom.xml to use snapshot version of DL4J or just copy the `DataSetIteratorSplitter` directly from the DL4J master. Note that I have already made a local copy of this class into the project repository. 
 
 Code execution:
+
 [![DL4J - HyperParameter tuning](https://img.youtube.com/vi/tg6t7LMdMow/0.jpg)](https://www.youtube.com/watch?v=tg6t7LMdMow)
 
 ## 4) [Santander Value Prediction Kaggle Challenge (Data pre-processing so far)]

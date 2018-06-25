@@ -114,7 +114,7 @@ public class AnimalClassifier {
         dataSetIterator.setPreProcessor(scaler);
         MultiLayerNetwork model = new MultiLayerNetwork(config);
         model.init();
-        model.setListeners(new PerformanceListener(100)); //PerformanceListener for optimized training
+        model.setListeners(new ScoreIterationListener(100)); //PerformanceListener for optimized training
         model.fit(dataSetIterator,100);
 
         //train with transformations

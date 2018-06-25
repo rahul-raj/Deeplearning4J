@@ -89,7 +89,7 @@ public class DeepLearning4j {
 
         model.setListeners(new ScoreIterationListener(100));
 
-        //Benchmarking: Reduce/Frequent calls to garbage collector
+        //Benchmarking: Reduce/Disable Frequent calls to garbage collector
         //Nd4j.getMemoryManager().setAutoGcWindow(10000);
         //Nd4j.getMemoryManager().togglePeriodicGc(false);
 

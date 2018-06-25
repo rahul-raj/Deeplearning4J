@@ -51,7 +51,7 @@ public class SantanderValuePrediction {
             }
         }
 
-
+ 
         transformProcessRecordReader = new TransformProcessRecordReader(recordReader,builder.build());
         System.out.println("args = [" + transformProcessRecordReader.next().size() + "]");
 

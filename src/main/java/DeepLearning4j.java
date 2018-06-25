@@ -102,23 +102,7 @@ public class DeepLearning4j {
         System.out.println("args = " + evaluation.stats() + "");
 
 
-      //  Evaluation evaluation = new Evaluation(1);
-       // INDArray output = model.output(splitter.getTestIterator());
 
-
-/*
-        Evaluation evaluation = new Evaluation(1);
-        INDArray output = model.output(splitter.getTestIterator());
-       // output = output.cond(new AbsValueGreaterThan(0.50));
-        DataSetIterator splitIterator = splitter.getTestIterator();
-        List<DataSet> dataset = new ArrayList<>();
-        while(iterator.hasNext()){
-             dataset.add(splitIterator.next());
-        }
-        DataSet testSet = DataSet.merge(dataset);
-        evaluation.eval(testSet.getLabels(),output);
-        System.out.println("args = " + evaluation.stats() + "");
-*/
 
 
     }

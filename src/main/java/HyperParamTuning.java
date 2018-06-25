@@ -125,6 +125,7 @@ public class HyperParamTuning {
         runner.execute();
 
         //Print the best hyper params
+
         double bestScore = runner.bestScore();
         int bestCandidateIndex = runner.bestScoreCandidateIndex();
         int numberOfConfigsEvaluated = runner.numCandidatesCompleted();

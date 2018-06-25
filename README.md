@@ -7,12 +7,14 @@ This is a java deep learning project repository with DL4J based projects made fr
 
 Projects included so far:
 
-1) [Customer loss prediction using standard feed forward network](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/DeepLearning4j.java)
+## 1) [Customer loss prediction using standard feed forward network]
 
+(https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/DeepLearning4j.java)
  [![DL4J - Customer Loss prediction example](https://img.youtube.com/vi/DGllOCWL5w0/0.jpg)](https://www.youtube.com/watch?v=DGllOCWL5w0)
  
 Given **n** labels defined, obtain the probability of a customer who leaves the bank. The problem statement is taken from a course driven by superdatasciene team. They discuss Keras implementation for the same while this is a small attempt to do the same with Java. Keras has managed to obtain 83% consistent accuracy however DL4J model outperform Keras as it gives 85.5% of consistent accuracy. 
-![enter image description here](https://user-images.githubusercontent.com/517415/41832945-f24ea744-786b-11e8-8b99-022508c2e10a.png)
+
+![GPU changes](https://user-images.githubusercontent.com/517415/41832945-f24ea744-786b-11e8-8b99-022508c2e10a.png)
 
 2) [Animal classification using CNN (no pre-built model)](https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/AnimalClassifier.java)
 

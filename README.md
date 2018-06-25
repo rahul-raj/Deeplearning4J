@@ -22,7 +22,7 @@ Given **n** labels defined, obtain the probability of a customer who leaves the 
 ## 2) [Animal classification using CNN (no pre-built model)]
 (https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/AnimalClassifier.java)
 
-You may observe over-fitting if you're using GPU or running CPU with about 100 epochs. 30-60 epochs should be fine for a CPU execution, however feel free to fork this up, experiment on your own and send me a pull request if you obtain a good CNN model better than this existing one! DL4J github examples used alexnet while we just coded a custom model from scratch. 4 animal labels and around 6000 images in total (training+testing). More images would result in an obvious increase of accuracy.
+You may observe over-fitting if you're using GPU or running CPU with about 100 epochs. 30-60 epochs should be fine for a CPU execution, however feel free to fork this up, experiment on your own and send me a pull request if you obtain a good CNN model better than this existing one! DL4J github examples used alexnet while we just coded a custom model from scratch. 4 animal labels with 6000 images in total (training+testing). More images would result in an obvious increase of accuracy.
 
 ## 3) [HyperParameter tuning using Java]
 (https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/HyperParamTuning.java)

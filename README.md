@@ -14,7 +14,7 @@ Projects included so far:
  
 Given **n** labels defined, obtain the probability of a customer who leaves the bank. The problem statement is taken from a course driven by superdatasciene team. They discuss Keras implementation for the same while this is a small attempt to do the same with Java. Keras has managed to obtain 83% consistent accuracy however DL4J model outperform Keras as it gives 85.5% of consistent accuracy. 
 
-![Optimization](https://user-images.githubusercontent.com/517415/41850695-1c4ea260-78a3-11e8-824b-f47c3fe6f134.png)
+![Optimization](https://user-images.githubusercontent.com/517415/41850738-4db23466-78a3-11e8-802d-c89df35a227b.png)
 
 ## 2) [Animal classification using CNN (no pre-built model)]
 (https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/AnimalClassifier.java)

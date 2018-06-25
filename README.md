@@ -24,6 +24,8 @@ You may observe over-fitting if you're using GPU or running CPU with about 100 e
 ## 3) [HyperParameter tuning using Java]
 (https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/HyperParamTuning.java)
 
+![Make sure to implement your own data provider](https://user-images.githubusercontent.com/517415/41833939-f8f4665c-786f-11e8-917a-0f8fd97851a1.png)
+
 A bug has been reported to DL4J while I was coding this one, however they made a fix and it's available only on snapshots. Consider this as unstable version now until it's tested completely. Currently I'm checking with DL4J team to identify possible pitfall with the paramater space config or a possible bug that will soon to be reported to them. 
 
 ## 4) [Santander Value Prediction Kaggle Challenge (Data pre-processing so far)]

@@ -31,6 +31,8 @@ public class SantanderValuePrediction {
         recordReader.initialize(new FileSplit(new ClassPathResource("train.csv").getFile()));
         TransformProcessRecordReader transformProcessRecordReader = new TransformProcessRecordReader(recordReader,transformProcess);
 
+        log.info("Data Pre-processing starts...");
+
         double[] max = new double[4992];
         double[] min = new double[4992];
         while(transformProcessRecordReader.hasNext()){
@@ -45,6 +47,7 @@ public class SantanderValuePrediction {
         recordReader.initialize(new FileSplit(new ClassPathResource("train.csv").getFile()));
         TransformProcess.Builder builder = new TransformProcess.Builder(schema)
                                                                .removeColumns("ID");
+        log.info("Removing constant features...");
         for(int i=1;i<=4991;i++){
             if(max[i]==min[i]){
                 builder.removeColumns("col_"+String.valueOf(i));

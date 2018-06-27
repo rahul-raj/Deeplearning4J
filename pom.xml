@@ -97,4 +97,18 @@
             <version>1.7.25</version>
         </dependency>
     </dependencies>
+    <!-- Uncomment to use snapshot version -->
+    <!--<repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>  &lt;!&ndash; Optional, update daily &ndash;&gt;
+            </snapshots>
+        </repository>
+    </repositories>-->
 </project>

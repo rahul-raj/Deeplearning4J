@@ -36,6 +36,7 @@ GPU fix has been done by DL4J team and updates available only on snapshots since
 A bug has been reported to DL4J while I was coding this one, however they made a fix and it's available only on snapshots. Consider this as unstable version now until it's tested completely. Currently I'm checking with DL4J team to identify possible pitfall with the paramater space config or a possible bug that will soon to be reported to them. 
 
 **Update:**
+
 Code fix has been done. Until a new version of DL4J is released, change your pom.xml to use snapshot version of DL4J or just copy the `DataSetIteratorSplitter` directly from the DL4J master. Note that I have already made a local copy of this class into the project repository. 
 
 Code execution:

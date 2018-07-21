@@ -1,3 +1,5 @@
+package examples;
+
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -31,7 +33,7 @@ import java.util.Arrays;
 
 public class CustomerLossPrediction {
 
-    private static Logger log = LoggerFactory.getLogger("CustomerLossPrediction.class");
+    private static Logger log = LoggerFactory.getLogger("examples.CustomerLossPrediction.class");
 
     public static void main(String[] args) throws IOException, InterruptedException {
 

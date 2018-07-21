@@ -1,3 +1,5 @@
+package examples;
+
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -38,7 +40,7 @@ import java.util.List;
 
 public class Test {
 
-    private static Logger log = LoggerFactory.getLogger("CustomerLossPrediction.class");
+    private static Logger log = LoggerFactory.getLogger("examples.CustomerLossPrediction.class");
     public static void main(String[] args) throws IOException, InterruptedException, InvalidKerasConfigurationException, UnsupportedKerasConfigurationException {
 
         Schema schema = new Schema.Builder()

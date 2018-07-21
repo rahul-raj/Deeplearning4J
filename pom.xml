@@ -22,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>AnimalClassifier</mainClass>
+                            <mainClass>examples.AnimalClassifier</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -1,3 +1,5 @@
+package examples;
+
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -46,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HyperParamTuning {
 
-    private static Logger log = LoggerFactory.getLogger("HyperParamTuning.class");
+    private static Logger log = LoggerFactory.getLogger("examples.HyperParamTuning.class");
 
     public static void main(String[] args) throws IOException, InterruptedException {
 

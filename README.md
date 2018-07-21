@@ -15,7 +15,7 @@ Make sure to switch over pom.xml changes as per your convenience whether you are
 
 Given defined **n** labels, obtain the probability of a customer who leaves the bank. The problem statement is taken from a course driven by a superdatasciene team. They discuss a solution using Keras implementation while this is an attempt to do the same with Java. The DLJ4 model gives a consistent 85.5% accuracy which is better than the Keras model of 83% accuracy.
 
-File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/CustomerLossPrediction.java
+File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples.CustomerLossPrediction.java
 
 Code execution:
 
@@ -27,7 +27,7 @@ Code execution:
 
 You may observe over-fitting if you're using GPU or running CPU with about 100 epochs. 30-60 epochs should be fine for a CPU execution, however feel free to fork this up, experiment on your own and send me a pull request if you obtain a good CNN model better than this existing one! DL4J github examples used alexnet while we just coded a custom model from scratch. 4 animal labels with 6000 images in total (training+testing). More images would result in an obvious increase of accuracy.
 
-File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/AnimalClassifier.java
+File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples.AnimalClassifier.java
 
 **Update:** GPU fix has been done by DL4J team and updates available only on snapshots since changes are on ND4j backend. Yet to test them.
 
@@ -37,9 +37,9 @@ File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java
 
 A bug has been reported to DL4J while I was coding this one, however they made a fix and it's available only on snapshots. Consider this as unstable version now until it's tested completely. Currently I'm checking with DL4J team to identify possible pitfall with the paramater space config or a possible bug that will soon to be reported to them. 
 
-File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/HyperParamTuning.java
+File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples.HyperParamTuning.java
 
-**Update:** Code fix has been done. Until a new version of DL4J is released, change your pom.xml to use snapshot version of DL4J or just copy the `DataSetIteratorSplitter` directly from the DL4J master. Note that I have already made a local copy of this class into the project repository. 
+**Update:** Code fix has been done. Until a new version of DL4J is released, change your pom.xml to use snapshot version of DL4J or just copy the `examples.DataSetIteratorSplitter` directly from the DL4J master. Note that I have already made a local copy of this class into the project repository.
 
 Code execution:
 
@@ -49,5 +49,5 @@ Code execution:
 
 Probably the biggest learning curve where I plan to implement this Kaggle challenge all by using Java. Objective is to perform all the tasks (data pre-processing, transform, load, network config and evaluation) using Java. We're trying to build a production-ready real-time deep learning application. 
 
-File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/SantanderValuePrediction.java
+File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples.SantanderValuePrediction.java
 

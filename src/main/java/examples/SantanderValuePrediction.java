@@ -1,3 +1,5 @@
+package examples;
+
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class SantanderValuePrediction {
 
-    private static Logger log = LoggerFactory.getLogger("SantanderValuePrediction.class");
+    private static Logger log = LoggerFactory.getLogger("examples.SantanderValuePrediction.class");
 
 
     public static void main(String[] args) throws IOException, InterruptedException, IllegalAccessException, InstantiationException {

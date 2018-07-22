@@ -38,8 +38,7 @@ public class CustomerLossPrediction {
 
     private static Logger log = LoggerFactory.getLogger("examples.CustomerLossPrediction.class");
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
+    public TransformProcess generateSchemaAndTransform(){
         //Schema Definitions
         Schema schema = new Schema.Builder()
                 .addColumnsString("RowNumber")
@@ -57,18 +56,28 @@ public class CustomerLossPrediction {
                 .categoricalToOneHot("Geography")
                 .removeColumns("Geography[France]")
                 .build();
+        return transformProcess;
 
+    }
+
+    public RecordReader generateReader(File file) throws IOException, InterruptedException{
         //CSVReader - Reading from file and applying transformation
         RecordReader reader = new CSVRecordReader(1,',');
-        reader.initialize(new FileSplit(new ClassPathResource("Churn_Modelling.csv").getFile()));
-        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(reader,transformProcess);
+        reader.initialize(new FileSplit(file));
+        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(reader,generateSchemaAndTransform());
+        return transformProcessRecordReader;
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+/*        CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
 
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 2;
         int batchSize = 8;
         INDArray weightsArray = Nd4j.create(new double[]{0.57, 0.75});
 
-        DataSetIterator iterator = new RecordReaderDataSetIterator(transformProcessRecordReader,batchSize,labelIndex,numClasses);
+        DataSetIterator iterator = new RecordReaderDataSetIterator(customerLossPrediction.generateReader(new ClassPathResource("Churn_Modelling.csv").getFile()),batchSize,labelIndex,numClasses);
         DataNormalization dataNormalization = new NormalizerStandardize();
         dataNormalization.fit(iterator);
         iterator.setPreProcessor(dataNormalization);
@@ -103,10 +112,16 @@ public class CustomerLossPrediction {
         System.out.println("args = " + evaluation.stats() + "");
 
 
-        ModelSerializer.writeModel(model,new File("model.zip"),true);
+        ModelSerializer.writeModel(model,new File("model.zip"),true);*/
         MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(new File("model.zip"));
 
         System.out.println(restored.params()+" \n"+restored.getLayerWiseConfigurations());
+        CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
+        RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
+        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,1);
+
+        INDArray array = restored.output(Nd4j.create(new float[]{}),false);
+        log.info(array.toString());
 
 
     }

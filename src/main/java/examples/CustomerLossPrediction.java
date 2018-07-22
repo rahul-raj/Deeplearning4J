@@ -20,6 +20,7 @@ import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.cpu.nativecpu.NDArray;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
@@ -68,9 +69,11 @@ public class CustomerLossPrediction {
         return transformProcessRecordReader;
     }
 
+
+
     public static void main(String[] args) throws IOException, InterruptedException {
 
-/*        CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
+        CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
 
         int labelIndex = 11;  // consider index 0 to 11  for input
         int numClasses = 2;
@@ -112,16 +115,16 @@ public class CustomerLossPrediction {
         System.out.println("args = " + evaluation.stats() + "");
 
 
-        ModelSerializer.writeModel(model,new File("model.zip"),true);*/
+        ModelSerializer.writeModel(model,new File("model.zip"),true);
         MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(new File("model.zip"));
 
         System.out.println(restored.params()+" \n"+restored.getLayerWiseConfigurations());
-        CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
-        RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
+        //CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
+       /* RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
         DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,1);
 
         INDArray array = restored.output(Nd4j.create(new float[]{}),false);
-        log.info(array.toString());
+        log.info(array.toString());*/
 
 
     }

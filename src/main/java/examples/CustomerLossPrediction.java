@@ -24,6 +24,7 @@ import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.io.ClassPathResource;
@@ -91,7 +92,10 @@ public class CustomerLossPrediction {
     }
 
     public INDArray generateOutput(File file) throws IOException, InterruptedException {
-        INDArray array = RecordConverter.toArray(generateSchemaAndReaderForPrediction(file).next());
+        RecordReader recordReader = generateSchemaAndReaderForPrediction(file);
+        INDArray array = RecordConverter.toArray(recordReader.next());
+        DataNormalization dataNormalization = new NormalizerStandardize();
+        dataNormalization.transform(array);
         return array;
     }
 

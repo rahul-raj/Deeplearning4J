@@ -40,6 +40,7 @@ import java.util.Arrays;
 public class CustomerLossPrediction {
 
     private static Logger log = LoggerFactory.getLogger("examples.CustomerLossPrediction.class");
+    DataNormalization dataNormalization = new NormalizerStandardize();
 
     public TransformProcess generateSchemaAndTransform(){
         //Schema Definitions
@@ -94,7 +95,7 @@ public class CustomerLossPrediction {
     public INDArray generateOutput(File file) throws IOException, InterruptedException {
         RecordReader recordReader = generateSchemaAndReaderForPrediction(file);
         INDArray array = RecordConverter.toArray(recordReader.next());
-        DataNormalization dataNormalization = new NormalizerStandardize();
+        DataNormalization dataNormalization = this.dataNormalization;
         dataNormalization.transform(array);
         return array;
     }
@@ -122,6 +123,7 @@ public class CustomerLossPrediction {
         DataNormalization dataNormalization = new NormalizerStandardize();
         dataNormalization.fit(iterator);
         iterator.setPreProcessor(dataNormalization);
+        customerLossPrediction.dataNormalization=dataNormalization;
         DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1250,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");

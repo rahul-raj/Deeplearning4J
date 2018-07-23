@@ -40,7 +40,6 @@ import java.util.Arrays;
 public class CustomerLossPrediction {
 
     private static Logger log = LoggerFactory.getLogger("examples.CustomerLossPrediction.class");
-    DataNormalization dataNormalization = new NormalizerStandardize();
 
     public TransformProcess generateSchemaAndTransform(){
         //Schema Definitions
@@ -95,8 +94,8 @@ public class CustomerLossPrediction {
     public INDArray generateOutput(File file) throws IOException, InterruptedException {
         RecordReader recordReader = generateSchemaAndReaderForPrediction(file);
         INDArray array = RecordConverter.toArray(recordReader.next());
-        DataNormalization dataNormalization = this.dataNormalization;
-        dataNormalization.transform(array);
+        NormalizerStandardize normalizerStandardize = ModelSerializer.restoreNormalizerFromFile(new File("model.zip"));
+        normalizerStandardize.transform(array);
         return array;
     }
 
@@ -123,7 +122,6 @@ public class CustomerLossPrediction {
         DataNormalization dataNormalization = new NormalizerStandardize();
         dataNormalization.fit(iterator);
         iterator.setPreProcessor(dataNormalization);
-        customerLossPrediction.dataNormalization=dataNormalization;
         DataSetIteratorSplitter splitter = new DataSetIteratorSplitter(iterator,1250,0.8);
 
         log.info("Building Model------------------->>>>>>>>>");
@@ -154,16 +152,13 @@ public class CustomerLossPrediction {
         Evaluation evaluation = model.evaluate(splitter.getTestIterator(),Arrays.asList("0","1"));
         System.out.println("args = " + evaluation.stats() + "");
 
-
-        ModelSerializer.writeModel(model,new File("model.zip"),true);
+        File file = new File("model.zip");
+        ModelSerializer.writeModel(model,file,true);
+        ModelSerializer.addNormalizerToModel(file,dataNormalization);
         MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(new File("model.zip"));
 
 
         System.out.println(restored.params()+" \n"+restored.getLayerWiseConfigurations());
-        //CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
-        //RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
-       // DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,1);
-
         INDArray output = customerLossPrediction.generateOutput(new File("test.csv"));
         INDArray array = restored.output(output,false);
         log.info(array.toString());

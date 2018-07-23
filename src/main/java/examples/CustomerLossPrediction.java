@@ -6,6 +6,7 @@ import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReade
 import org.datavec.api.split.FileSplit;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.datavec.api.util.ndarray.RecordConverter;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.datasets.iterator.DataSetIteratorSplitter;
 import org.deeplearning4j.eval.Evaluation;
@@ -48,7 +49,12 @@ public class CustomerLossPrediction {
                 .addColumnInteger("CreditScore")
                 .addColumnCategorical("Geography",Arrays.asList("France","Spain","Germany"))
                 .addColumnCategorical("Gender",Arrays.asList("Male","Female"))
-                .addColumnsInteger("Age","Tenure","Balance","NumOfProducts","HasCrCard","IsActiveMember","EstimatedSalary","Exited").build();
+                .addColumnsInteger("Age","Tenure")
+                .addColumnsDouble("Balance")
+                .addColumnsInteger("NumOfProducts","HasCrCard","IsActiveMember")
+                .addColumnDouble("EstimatedSalary")
+                .addColumnInteger("Exited")
+                .build();
 
         //Schema Transformation
         TransformProcess transformProcess = new TransformProcess.Builder(schema)
@@ -59,6 +65,34 @@ public class CustomerLossPrediction {
                 .build();
         return transformProcess;
 
+    }
+
+    public RecordReader generateSchemaAndReaderForPrediction(File file) throws IOException, InterruptedException {
+
+        Schema schema = new Schema.Builder()
+                .addColumnInteger("CreditScore")
+                .addColumnCategorical("Geography", Arrays.asList("France","Spain","Germany"))
+                .addColumnCategorical("Gender", Arrays.asList("Male","Female"))
+                .addColumnsInteger("Age","Tenure")
+                .addColumnDouble("Balance")
+                .addColumnsInteger("NumOfProducts","HasCrCard","IsActiveMember")
+                .addColumnDouble("EstimatedSalary")
+                .build();
+        TransformProcess transformProcess = new TransformProcess.Builder(schema)
+                .categoricalToInteger("Gender")
+                .categoricalToOneHot("Geography")
+                .removeColumns("Geography[France]")
+                .build();
+
+        RecordReader reader = new CSVRecordReader(0,',');
+        reader.initialize(new FileSplit(file));
+        RecordReader recordReader = new TransformProcessRecordReader(reader,transformProcess);
+        return recordReader;
+    }
+
+    public INDArray generateOutput(File file) throws IOException, InterruptedException {
+        INDArray array = RecordConverter.toArray(generateSchemaAndReaderForPrediction(file).next());
+        return array;
     }
 
     public RecordReader generateReader(File file) throws IOException, InterruptedException{
@@ -118,13 +152,16 @@ public class CustomerLossPrediction {
         ModelSerializer.writeModel(model,new File("model.zip"),true);
         MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(new File("model.zip"));
 
+
         System.out.println(restored.params()+" \n"+restored.getLayerWiseConfigurations());
         //CustomerLossPrediction customerLossPrediction = new CustomerLossPrediction();
-       /* RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
-        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,1);
+        //RecordReader recordReader = customerLossPrediction.generateReader(new File("test.csv"));
+       // DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(recordReader,1);
 
-        INDArray array = restored.output(Nd4j.create(new float[]{}),false);
-        log.info(array.toString());*/
+        INDArray output = customerLossPrediction.generateOutput(new File("test.csv"));
+        INDArray array = restored.output(output,false);
+        log.info(array.toString());
+
 
 
     }

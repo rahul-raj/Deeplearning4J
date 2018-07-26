@@ -92,11 +92,13 @@ public class CustomerLossPrediction {
     }
 
     public INDArray generateOutput(File file) throws IOException, InterruptedException {
+        File modelFile = new File("model.zip");
+        MultiLayerNetwork restored = ModelSerializer.restoreMultiLayerNetwork(modelFile);
         RecordReader recordReader = generateSchemaAndReaderForPrediction(file);
         INDArray array = RecordConverter.toArray(recordReader.next());
-        NormalizerStandardize normalizerStandardize = ModelSerializer.restoreNormalizerFromFile(new File("model.zip"));
+        NormalizerStandardize normalizerStandardize = ModelSerializer.restoreNormalizerFromFile(modelFile);
         normalizerStandardize.transform(array);
-        return array;
+        return restored.output(array,false);
     }
 
     public RecordReader generateReader(File file) throws IOException, InterruptedException{
@@ -160,8 +162,8 @@ public class CustomerLossPrediction {
 
         System.out.println(restored.params()+" \n"+restored.getLayerWiseConfigurations());
         INDArray output = customerLossPrediction.generateOutput(new File("test.csv"));
-        INDArray array = restored.output(output,false);
-        log.info(array.toString());
+        //INDArray array = restored.output(output,false);
+        log.info(output.toString());
 
 
 

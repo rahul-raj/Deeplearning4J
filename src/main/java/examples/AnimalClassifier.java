@@ -15,6 +15,8 @@ import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.nn.conf.GradientNormalization;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
+import org.deeplearning4j.nn.conf.distribution.GaussianDistribution;
+import org.deeplearning4j.nn.conf.distribution.NormalDistribution;
 import org.deeplearning4j.nn.conf.inputs.InputType;
 import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -29,6 +31,8 @@ import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
 import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.primitives.Pair;
+import org.nd4j.linalg.schedule.ScheduleType;
+import org.nd4j.linalg.schedule.StepSchedule;
 
 import java.io.File;
 import java.util.Arrays;
@@ -73,40 +77,52 @@ public class AnimalClassifier {
         ImageTransform transform = new PipelineImageTransform(pipeline);
         DataNormalization scaler = new ImagePreProcessingScaler(0,1);
 
-        MultiLayerConfiguration config = new NeuralNetConfiguration.Builder()
-                .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
-                .l2(.005)
-                .weightInit(WeightInit.XAVIER)
-                .updater(new Nesterovs(0.008D,0.9D))
+        MultiLayerConfiguration config;
+        config = new NeuralNetConfiguration.Builder()
+                .weightInit(WeightInit.DISTRIBUTION)
+                .dist(new NormalDistribution(0.0, 0.01))
+                .activation(Activation.RELU)
+                .updater(new Nesterovs(new StepSchedule(ScheduleType.ITERATION, 1e-2, 0.1, 100000), 0.9))
+                .biasUpdater(new Nesterovs(new StepSchedule(ScheduleType.ITERATION, 2e-2, 0.1, 100000), 0.9))
+                .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer) // normalize to prevent vanishing or exploding gradients
+                .l2(5 * 1e-4)
+               // .weightInit(WeightInit.XAVIER)
+               // .updater(new Nesterovs(0.008D,0.9D))
                 .list()
-                .layer(new ConvolutionLayer.Builder(5,5)
+                .layer(new ConvolutionLayer.Builder(11,11)
                         .nIn(channels)
-                        .nOut(30)
-                        .stride(1,1)
+                        .nOut(96)
+                        .stride(4,4)
                         .activation(Activation.RELU)
                         .build())
+                .layer(1, new LocalResponseNormalization.Builder().name("lrn1").build())
                 .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
-                        .stride(2,2)
-                        .kernelSize(2,2)
+                        .kernelSize(3,3)
                         .build())
                 .layer(new ConvolutionLayer.Builder(5,5)
-                        .nOut(30)
+                        .nOut(256)
                         .stride(1,1)
                         .activation(Activation.RELU)
                         .build())
+                .layer(1, new LocalResponseNormalization.Builder().name("lrn2").build())
                 .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
-                        .stride(2,2)
-                        .kernelSize(2,2)
+                        .kernelSize(3,3)
                         .build())
                 .layer(new DenseLayer.Builder()
                         .nOut(500)
+                        .dist(new GaussianDistribution(0, 0.005))
+                        .activation(Activation.RELU)
+                        .build())
+                .layer(new DenseLayer.Builder()
+                        .nOut(500)
+                        .dist(new GaussianDistribution(0, 0.005))
                         .activation(Activation.RELU)
                         .build())
                 .layer(new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
                         .nOut(numLabels)
                         .activation(Activation.SOFTMAX)
                         .build())
-                .setInputType(InputType.convolutionalFlat(30,30,3))
+                .setInputType(InputType.convolutional(30,30,3))
                 .backprop(true).pretrain(false)
                 .build();
 

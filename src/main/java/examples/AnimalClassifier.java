@@ -12,6 +12,7 @@ import org.datavec.image.transform.PipelineImageTransform;
 import org.datavec.image.transform.WarpImageTransform;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.eval.Evaluation;
+import org.deeplearning4j.nn.conf.GradientNormalization;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.inputs.InputType;
@@ -42,7 +43,7 @@ public class AnimalClassifier {
         int batchSize=10;
 
         //load files and split
-        File parentDir = new File("C:/Users/Admin/Downloads/imagenet");
+        File parentDir = new File("/home/Deeplearning4J/imagenet");
         FileSplit fileSplit = new FileSplit(parentDir, NativeImageLoader.ALLOWED_FORMATS,new Random(42));
         int numLabels = fileSplit.getRootDir().listFiles(File::isDirectory).length;
 
@@ -62,7 +63,7 @@ public class AnimalClassifier {
         ImageTransform transform2 = new FlipImageTransform(new Random(123));
         ImageTransform transform3 = new WarpImageTransform(new Random(42),42);
 
-        //pipelines to specify image transformation. 
+        //pipelines to specify image transformation.
         List<Pair<ImageTransform,Double>> pipeline = Arrays.asList(
                 new Pair<>(transform1, 0.8),
                 new Pair<>(transform2, 0.7),
@@ -73,39 +74,41 @@ public class AnimalClassifier {
         DataNormalization scaler = new ImagePreProcessingScaler(0,1);
 
         MultiLayerConfiguration config = new NeuralNetConfiguration.Builder()
-                                             .weightInit(WeightInit.XAVIER)
-                                             .updater(new Nesterovs(0.008D,0.9D))
-                                             .list()
-                                             .layer(new ConvolutionLayer.Builder(5,5)
-                                                        .nIn(channels)
-                                                        .nOut(30)
-                                                        .stride(1,1)
-                                                        .activation(Activation.RELU)
-                                                        .build())
-                                             .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
-                                                        .stride(2,2)
-                                                        .kernelSize(2,2)
-                                                        .build())
-                                             .layer(new ConvolutionLayer.Builder(5,5)
-                                                        .nOut(30)
-                                                        .stride(1,1)
-                                                        .activation(Activation.RELU)
-                                                        .build())
-                                             .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
-                                                        .stride(2,2)
-                                                        .kernelSize(2,2)
-                                                        .build())
-                                             .layer(new DenseLayer.Builder()
-                                                        .nOut(500)
-                                                        .activation(Activation.RELU)
-                                                        .build())
-                                             .layer(new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-                                                        .nOut(numLabels)
-                                                        .activation(Activation.SOFTMAX)
-                                                        .build())
-                                             .setInputType(InputType.convolutionalFlat(30,30,3))
-                                             .backprop(true).pretrain(false)
-                                             .build();
+                .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
+                .l2(.005)
+                .weightInit(WeightInit.XAVIER)
+                .updater(new Nesterovs(0.008D,0.9D))
+                .list()
+                .layer(new ConvolutionLayer.Builder(5,5)
+                        .nIn(channels)
+                        .nOut(30)
+                        .stride(1,1)
+                        .activation(Activation.RELU)
+                        .build())
+                .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
+                        .stride(2,2)
+                        .kernelSize(2,2)
+                        .build())
+                .layer(new ConvolutionLayer.Builder(5,5)
+                        .nOut(30)
+                        .stride(1,1)
+                        .activation(Activation.RELU)
+                        .build())
+                .layer(new SubsamplingLayer.Builder(PoolingType.MAX)
+                        .stride(2,2)
+                        .kernelSize(2,2)
+                        .build())
+                .layer(new DenseLayer.Builder()
+                        .nOut(500)
+                        .activation(Activation.RELU)
+                        .build())
+                .layer(new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                        .nOut(numLabels)
+                        .activation(Activation.SOFTMAX)
+                        .build())
+                .setInputType(InputType.convolutionalFlat(30,30,3))
+                .backprop(true).pretrain(false)
+                .build();
 
 
         //train without transformations
@@ -124,7 +127,7 @@ public class AnimalClassifier {
         dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);
         scaler.fit(dataSetIterator);
         dataSetIterator.setPreProcessor(scaler);
-        model.fit(dataSetIterator,100);
+        model.fit(dataSetIterator,10);
 
         imageRecordReader.initialize(testData);
         dataSetIterator = new RecordReaderDataSetIterator(imageRecordReader,batchSize,1,numLabels);

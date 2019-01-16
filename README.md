@@ -15,7 +15,7 @@ Make sure to switch over pom.xml changes as per your convenience whether you are
 
 Given defined **n** labels, obtain the probability of a customer who leaves the bank. The problem statement is taken from a course driven by a superdatasciene team. They discuss a solution using Keras implementation while this is an attempt to do the same with Java. The DLJ4 model gives a consistent 85.5% accuracy which is better than the Keras model of 83% accuracy.
 
-File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples.CustomerLossPrediction.java
+File link: https://github.com/rahul-raj/Deeplearning4J/blob/master/src/main/java/examples/CustomerLossPrediction.java
 
 Code execution:
 

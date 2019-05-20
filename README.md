@@ -1,5 +1,10 @@
 
+
 # Deeplearning4J
+## This repository is no longer maintained. I would recommend checking out the repository: (https://github.com/rahul-raj/Java-Deep-Learning-Cookbook) , however the examples listed in this repository should still work. 
+
+### If you come across any bugs, make sure you change the DL4j version to newest release. If it still appears, feel free to post an issue here.
+
 A java deep learning repository with DL4J based projects made from scratch. Projects included so far:
 
 1. Customer loss prediction using standard feed forward network
